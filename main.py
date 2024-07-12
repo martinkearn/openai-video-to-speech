@@ -10,6 +10,7 @@ load_dotenv()
 
 # Set vars
 audio_file_name="output_audio.wav"
+transcription_file_name="output_transcription.txt"
 audio_tts_file_name="output_tts_audio.mp3"
 
 # Get the audio from the video
@@ -29,10 +30,20 @@ transcription_result = transcription_client.audio.transcriptions.create(
     file=open("./"+audio_file_name, "rb"),            
     model=os.getenv("AZURE_OPENAI_WHISPER_DEPLOYMENT")
 )
+with open(transcription_file_name, "w") as file:
+    file.write(transcription_result.text)
+print("We have a transcription result (has also been written to " +transcription_file_name +")")
 print(transcription_result.text)
 
+# Await using input before carrying on to TTS
+print("Press Enter to continue (edit " +transcription_file_name +" before continuing if you wish to)...")
+input()
+
 # Get the speech audio from transcription
-print("Converting the transcription to AI speech audio")
+print("Converting " +transcription_file_name +" to AI text-to-speech audio with the " +os.getenv("AZURE_OPENAI_TTS_VOICE") +" voice")
+with open(transcription_file_name, "r") as file:
+    # Read the entire content of the file
+    transcription_from_file = file.read()
 tts_url = os.getenv("AZURE_OPENAI_ENDPOINT") +"/openai/deployments/" +os.getenv("AZURE_OPENAI_TTS_DEPLOYMENT") +"/audio/speech?api-version=2024-02-15-preview"
 tts_headers_list = {
  "api-key": os.getenv("AZURE_OPENAI_API_KEY"),
@@ -40,7 +51,7 @@ tts_headers_list = {
 }
 tts_payload = json.dumps({
     "model": "tts-1-hd",
-    "input": str(transcription_result.text),
+    "input": str(transcription_from_file),
     "voice": os.getenv("AZURE_OPENAI_TTS_VOICE")
 })
 tts_response = requests.request("POST", tts_url, data=tts_payload,  headers=tts_headers_list)
