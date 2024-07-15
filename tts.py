@@ -1,17 +1,24 @@
 import os
 import requests
 import json
+import sys
 from dotenv import load_dotenv
 
 # Load the .env file
 load_dotenv()
 
+# Get args if they exist
+if len(sys.argv) > 1:
+    voice = sys.argv[1]
+else:
+    voice = os.getenv("AZURE_OPENAI_TTS_VOICE")
+
 # Set vars
 transcription_file_name="output_transcription.txt"
-audio_tts_file_name="output_tts_audio.mp3"
+audio_tts_file_name="output_tts_audio_" +voice +".mp3"
 
 # Get the speech audio from transcription
-print("Converting " +transcription_file_name +" to AI text-to-speech audio with the " +os.getenv("AZURE_OPENAI_TTS_VOICE") +" voice")
+print("Converting " +transcription_file_name +" to AI text-to-speech audio with the " +voice +" voice")
 with open(transcription_file_name, "r") as file:
     # Read the entire content of the file
     transcription_from_file = file.read()
@@ -23,7 +30,7 @@ tts_headers_list = {
 tts_payload = json.dumps({
     "model": "tts-1-hd",
     "input": str(transcription_from_file),
-    "voice": os.getenv("AZURE_OPENAI_TTS_VOICE")
+    "voice": voice
 })
 tts_response = requests.request("POST", tts_url, data=tts_payload,  headers=tts_headers_list)
 print()
