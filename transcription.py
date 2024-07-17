@@ -7,12 +7,13 @@ from moviepy.editor import VideoFileClip
 load_dotenv()
 
 # Set vars
+video_file_name="video.mov"
 audio_file_name="output_original_audio.wav"
 transcription_file_name="output_transcription.txt"
 
 # Get the audio from the video
-print("Getting the audio from the video")
-video = VideoFileClip("video.mp4")
+print("Getting the audio from the video " +video_file_name)
+video = VideoFileClip(video_file_name)
 audio = video.audio
 audio.write_audiofile(audio_file_name)
 print()
@@ -26,8 +27,9 @@ transcription_client = AzureOpenAI(
 )
 transcription_result = transcription_client.audio.transcriptions.create(
     file=open("./"+audio_file_name, "rb"),            
-    model=os.getenv("AZURE_OPENAI_WHISPER_DEPLOYMENT")
-)
+    model=os.getenv("AZURE_OPENAI_WHISPER_DEPLOYMENT"),
+    language="en")
+
 with open(transcription_file_name, "w") as file:
     file.write(transcription_result.text)
 print()
