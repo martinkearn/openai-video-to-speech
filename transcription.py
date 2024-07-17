@@ -1,4 +1,5 @@
 import os
+import sys
 from openai import AzureOpenAI
 from dotenv import load_dotenv
 from moviepy.editor import VideoFileClip
@@ -6,8 +7,13 @@ from moviepy.editor import VideoFileClip
 # Load the .env file
 load_dotenv()
 
+# Get args if they exist
+if len(sys.argv) > 1:
+    video_file_name = sys.argv[1]
+else:
+    video_file_name = os.getenv("input/video.mov")
+
 # Set vars
-video_file_name="input/video.mov"
 audio_file_name="output/output_original_audio.wav"
 transcription_file_name="output/output_transcription.txt"
 
