@@ -15,8 +15,8 @@ else:
     voice = os.getenv("TTS_VOICE")
 
 # Set vars
-transcription_file_name="output_transcription.txt"
-audio_tts_file_name="output_tts_audio_" +voice +".mp3"
+transcription_file_name="output/output_transcription.txt"
+audio_tts_file_name="output/output_tts_audio_" +voice +".mp3"
 
 # Set OpenAI voice dicyionary. Avaliable voices from https://platform.openai.com/docs/guides/text-to-speech/quickstart
 open_ai_voices = {

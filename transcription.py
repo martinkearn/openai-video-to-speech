@@ -7,9 +7,9 @@ from moviepy.editor import VideoFileClip
 load_dotenv()
 
 # Set vars
-video_file_name="video.mov"
-audio_file_name="output_original_audio.wav"
-transcription_file_name="output_transcription.txt"
+video_file_name="input/video.mov"
+audio_file_name="output/output_original_audio.wav"
+transcription_file_name="output/output_transcription.txt"
 
 # Get the audio from the video
 print("Getting the audio from the video " +video_file_name)
