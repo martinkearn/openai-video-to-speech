@@ -20,9 +20,9 @@ logger = logging.getLogger(__name__)
 SPEECH_ENDPOINT = os.getenv('SPEECH_ENDPOINT',"https://swedencentral.api.cognitive.microsoft.com/")
 API_VERSION = "2024-04-15-preview"
 AVATAR_VIDEO_OUTPUT_FILENAME = "output/output_avatar.mp4"
-AVATAR_CHARACTER = "max" # talking avatar character
+AVATAR_CHARACTER = "harry" # talking avatar character
 AVATAR_STYLE = "business",  # talking avatar style, required for prebuilt avatar, optional for custom avatar
-AVATAR_VOICE = "en-US-OnyxMultilingualNeural"
+AVATAR_VOICE = "en-US-FableMultilingualNeural"
 INPUT_TEXT = "So, what is a workspace label? When we upload TDF files to C, we need a way to route the TDF file to the correct workspace. Traditionally, we'd use something like a UUID for this which is a long alphanumeric string. The problem with this approach is that the low side (C) is not connected to the high side (on premise). This makes it difficult for humans to remember and verbally share the ID. A Workspace Label is a word-based identifier using the approach popularised by the What3Words app. This means that while the label is still unique, it can be easily remembered and recalled by humans without the need for any kind of digital data transfer."
 
 
