@@ -23,7 +23,7 @@ AVATAR_VIDEO_OUTPUT_FILENAME = "output/output_avatar.mp4"
 AVATAR_CHARACTER = "max" # talking avatar character
 AVATAR_STYLE = "business",  # talking avatar style, required for prebuilt avatar, optional for custom avatar
 AVATAR_VOICE = "en-US-OnyxMultilingualNeural"
-INPUT_TEXT = "So what is a workspace label? When we upload TDF files to C, we need a way to route the TDF file to the correct workspace. Traditionally, we'd use something like a UUID for this which is a long alphanumeric string. The problem with this approach is that the high side (C) is not connected to the high side on premise. This makes it difficult for humans to remember and verbally share the ID. "
+INPUT_TEXT = "So, what is a workspace label? When we upload TDF files to C, we need a way to route the TDF file to the correct workspace. Traditionally, we'd use something like a UUID for this which is a long alphanumeric string. The problem with this approach is that the low side (C) is not connected to the high side (on premise). This makes it difficult for humans to remember and verbally share the ID. A Workspace Label is a word-based identifier using the approach popularised by the What3Words app. This means that while the label is still unique, it can be easily remembered and recalled by humans without the need for any kind of digital data transfer."
 
 
 def _create_job_id():
@@ -55,7 +55,11 @@ def submit_synthesis(job_id: str):
         ],
         "avatarConfig": {
             "talkingAvatarCharacter": f'{AVATAR_CHARACTER}',
-            "talkingAvatarStyle": 'business'
+            "talkingAvatarStyle": f'business', # API is rejecting f'{AVATAR_STYLE}' for some reason. Not sure why. Have not investigated
+            "videoFormat": "mp4",  # mp4 or webm, webm is required for transparent background
+            "videoCodec": "h264",  # hevc, h264 or vp9, vp9 is required for transparent background; default is hevc
+            "subtitleType": "soft_embedded",
+            "backgroundColor": "#FFFFFFFF", # background color in RGBA format, default is white; can be set to 'transparent' for transparent background
         }
     }
 
