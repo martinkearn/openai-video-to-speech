@@ -45,7 +45,7 @@ def submit_synthesis(job_id: str):
 
     payload = {
         'synthesisConfig': {
-            "voice": "{AVATAR_VOICE}",
+            "voice": f'{AVATAR_VOICE}',
         },
         "inputKind": "plainText",
         "inputs": [
@@ -54,8 +54,8 @@ def submit_synthesis(job_id: str):
             },
         ],
         "avatarConfig": {
-            "talkingAvatarCharacter": "{AVATAR_CHARACTER}",  
-            "talkingAvatarStyle": "{AVATAR_STYLE}"
+            "talkingAvatarCharacter": f'{AVATAR_CHARACTER}',
+            "talkingAvatarStyle": 'business'
         }
     }
 
@@ -91,8 +91,11 @@ def get_synthesis(job_id):
                 print(f"File downloaded successfully: {AVATAR_VIDEO_OUTPUT_FILENAME}")
             else:
                 print(f"Failed to download file. Status code: {response.status_code}")
-            
-            return response.json()['status']
+        elif response.json()['status'] == 'Failed':
+            logger.info(f'Batch synthesis job failed')
+            logger.info(f'error.message: {response.json()["properties"]["error"]["message"]}')
+
+        return response.json()['status']
     else:
         logger.error(f'Failed to get batch synthesis job: {response.text}')
 
