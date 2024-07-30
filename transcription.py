@@ -14,8 +14,8 @@ else:
     video_file_name = os.getenv("input/video.mov")
 
 # Set vars
-audio_file_name="output/output_original_audio.wav"
-transcription_file_name="output/output_transcription.txt"
+audio_file_name="output/transcription/output_original_audio.wav"
+transcription_file_name="output/transcription/output_transcription.txt"
 
 # Get the audio from the video
 print("Getting the audio from the video " +video_file_name)

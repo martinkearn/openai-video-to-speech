@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 SPEECH_ENDPOINT = os.getenv('SPEECH_ENDPOINT',"https://swedencentral.api.cognitive.microsoft.com/")
 API_VERSION = "2024-04-15-preview"
-AVATAR_VIDEO_OUTPUT_FILENAME = "output/output_avatar.mp4"
+AVATAR_VIDEO_OUTPUT_FILENAME = "output/avatar/output_avatar.mp4"
 AVATAR_CHARACTER = "harry" # talking avatar character
 AVATAR_STYLE = "business",  # talking avatar style, required for prebuilt avatar, optional for custom avatar
 AVATAR_VOICE = "en-US-FableMultilingualNeural"
