@@ -14,7 +14,7 @@ else:
     video_file_name = os.getenv("input/video.mov")
 
 # Set vars
-audio_file_name="output/transcription/output_original_audio.wav"
+audio_file_name="output/transcription/output_original_audio.mp3"
 transcription_file_name="output/transcription/output_transcription.txt"
 
 # Get the audio from the video
@@ -32,7 +32,7 @@ transcription_client = AzureOpenAI(
     azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
 )
 transcription_result = transcription_client.audio.transcriptions.create(
-    file=open("./"+audio_file_name, "rb"),            
+    file=open("./"+audio_file_name, "rb"),           
     model=os.getenv("AZURE_OPENAI_WHISPER_DEPLOYMENT"),
     language="en")
 
