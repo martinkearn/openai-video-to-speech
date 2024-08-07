@@ -5,6 +5,8 @@ from openai import AzureOpenAI
 from dotenv import load_dotenv
 from moviepy.editor import VideoFileClip
 
+print("Starting")
+
 parser = argparse.ArgumentParser(
     description='transcription.py - Converts a video into an MP3 audio track and then produces TXT transcription based on the audio track. Output files will be in /output/transcription.'
 )
