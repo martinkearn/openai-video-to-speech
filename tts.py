@@ -58,7 +58,7 @@ def azurespeech():
             print(f"Error details: {cancellation_details.error_details}")
 
 parser = argparse.ArgumentParser(
-    description='transcription.py - Converts a video into an MP3 audio track and then produces TXT transcription based on the audio track. Output files will be in /output/transcription.'
+    description='tts.py - Create an audio file using text-to-speech based on the text in an input TXT file. Output files will be in /output/tts.'
 )
 
 parser.add_argument(
