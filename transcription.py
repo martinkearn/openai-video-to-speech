@@ -5,14 +5,14 @@ from openai import AzureOpenAI
 from dotenv import load_dotenv
 from moviepy.editor import VideoFileClip
 
-print("Starting")
-
 parser = argparse.ArgumentParser(
     description='transcription.py - Converts a video into an MP3 audio track and then produces TXT transcription based on the audio track. Output files will be in /output/transcription.'
 )
 
 parser.add_argument(
     '-iv', '--inputvideofilename',
+    nargs='?', 
+    default='input/video.mov', 
     type=str, 
     help='The path and file name of the input video. Example input/video.mov'
 )
@@ -40,6 +40,9 @@ args = parser.parse_args()
 if len(sys.argv)==1:
     parser.print_help(sys.stderr)
     sys.exit(1)
+
+
+print("Starting")
 
 # Load the .env file
 load_dotenv()
