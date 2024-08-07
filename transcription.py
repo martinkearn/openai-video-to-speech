@@ -11,10 +11,8 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument(
     '-iv', '--inputvideofilename',
-    nargs='?', 
-    default='input/video.mov', 
     type=str, 
-    help='The path and file name of the input video. Example input/video.mov'
+    help='Required. The path and file name of the input video.'
 )
 
 parser.add_argument(
