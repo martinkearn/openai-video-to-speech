@@ -40,11 +40,7 @@ TTS_VOICE=alloy
 1. Install dependencies `pip3 install -r requirements.txt`
 
 ## Create a transcription from a video
-1. Add a file called `video.mp4` to the repository root
-1. Run script `python transcription.py`
-1. This will generate a file called `output_original_audio.wav` which is the original audio from the video
-1. This will also generate a file called `output_transcription.txt` which is the transcription
-1. You can optionally edit this transcription before converting it to AI speech
+1. Run script `python transcription.py --help` for arguments, options and usage
 
 ## Create AI speech audio from transcription
 1. Run script `python tts.py`. You can optionally pass in a voice as a parameter, which can be one of the 6 OpenAI voices (`alloy`, `echo`, `fable`, `onyx`, `nova`, `shimmer`) or one of the many Azure Speech Service voices such as `en-GB-BellaNeural`. For example `python tts.py alloy` or `python tts.py en-GB-BellaNeural`. If nothing is passed, the script defaults to what is in the `.env` file under `TTS_VOICE` which is OpenAI Alloy.

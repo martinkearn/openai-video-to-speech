@@ -12,9 +12,25 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument(
-    '-v', '--videofilename',
+    '-iv', '--inputvideofilename',
     type=str, 
     help='The path and file name of the input video. Example input/video.mov'
+)
+
+parser.add_argument(
+    '-oa', '--outputaudiofilename',
+    nargs='?', 
+    default='output/transcription/output_original_audio.mp3', 
+    type=str, 
+    help='The path of the output audio file (MP3). Defaults to output/transcription/output_original_audio.mp3'
+)
+
+parser.add_argument(
+    '-ot', '--outputtranscriptionfilename',
+    nargs='?', 
+    default='output/transcription/output_transcription.txt', 
+    type=str, 
+    help='The path of the output transcription file (TXT). Defaults to output/transcription/output_transcription.txt'
 )
 
 # Parse the arguments
@@ -28,15 +44,11 @@ if len(sys.argv)==1:
 # Load the .env file
 load_dotenv()
 
-# Set vars
-audio_file_name="output/transcription/output_original_audio.mp3"
-transcription_file_name="output/transcription/output_transcription.txt"
-
 # Get the audio from the video
-print("1. Getting the audio from the video " +args.videofilename)
-video = VideoFileClip(args.videofilename)
+print("1. Getting the audio from the video " +args.inputvideofilename)
+video = VideoFileClip(args.inputvideofilename)
 audio = video.audio
-audio.write_audiofile(audio_file_name)
+audio.write_audiofile(args.outputaudiofilename)
 
 # Get the audio as a transcript via OpenAI
 print("2. Transcribing the audio")
@@ -46,12 +58,12 @@ transcription_client = AzureOpenAI(
     azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
 )
 transcription_result = transcription_client.audio.transcriptions.create(
-    file=open("./"+audio_file_name, "rb"),           
+    file=open("./"+args.outputaudiofilename, "rb"),           
     model=os.getenv("AZURE_OPENAI_WHISPER_DEPLOYMENT"),
     language="en")
 
-with open(transcription_file_name, "w") as file:
+with open(args.outputtranscriptionfilename, "w") as file:
     file.write(transcription_result.text)
 
-print("3. Written transcription to " +transcription_file_name)
+print("3. Written transcription to " +args.outputtranscriptionfilename)
 print("Done")
