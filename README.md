@@ -1,10 +1,9 @@
 # openai-video-to-speech
-A Python script which converts an MP4 video to speech using Azure OpenAI services.
-
-The script does the following:
+A set of Python scripts which converts an MP4 video to speech using Azure OpenAI services.
 1. Take an MP4 video as a input
-1. Creates a transcription from the video's audio
-1. Create an OpenAI text-to-speech version of the transcription
+1. Strip audio from input video
+1. Creates a transcription from the audio
+1. Create an text-to-speech audio file from the transcription
 
 ## Setup OpenAI Service
 If you want to use Azure OpenAI voices, you need to setup an Azure OpenAI service.
@@ -33,7 +32,6 @@ AZURE_OPENAI_TTS_DEPLOYMENT=TtsDeploymentName
 AZURE_OPENAI_WHISPER_DEPLOYMENT=WhisperDeploymentname
 AZURE_SPEECH_KEY=Key
 AZURE_SPEECH_REGION=uksouth
-TTS_VOICE=alloy
 ```
 1. Create a Python Virtual Environment `python3 -m venv venv`
 1. Activate virtual environment using `venv\Scripts\activate` for Windows or `source venv/bin/activate` on MacOS/Linux
@@ -43,6 +41,5 @@ TTS_VOICE=alloy
 1. Run script `python transcription.py --help` for arguments, options and usage
 
 ## Create AI speech audio from transcription
-1. Run script `python tts.py`. You can optionally pass in a voice as a parameter, which can be one of the 6 OpenAI voices (`alloy`, `echo`, `fable`, `onyx`, `nova`, `shimmer`) or one of the many Azure Speech Service voices such as `en-GB-BellaNeural`. For example `python tts.py alloy` or `python tts.py en-GB-BellaNeural`. If nothing is passed, the script defaults to what is in the `.env` file under `TTS_VOICE` which is OpenAI Alloy.
-1. This will generate a file called `output_tts_audio_VOICE.mp3` which is the text-to-speech AI audio based on the contents of `output_transcription.txt`
+1. Run script `python tts.py --help` for arguments, options and usage
 
