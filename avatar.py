@@ -114,7 +114,7 @@ parser.add_argument(
     nargs='?', 
     default='en-US-FableMultilingualNeural', 
     type=str, 
-    help='Which voice to use. Can be one of the 6 OpenAI voices (alloy, echo, fable, onyx, nova, shimmer) or one of the many Azure Speech Service voices such as `en-US-FableMultilingualNeural`. Defaults to en-US-FableMultilingualNeural'
+    help='Which voice to use. Can be one of the many Azure Speech Service voices. Defaults to "en-US-FableMultilingualNeural". See https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=tts'
 )
 
 parser.add_argument(
