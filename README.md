@@ -1,9 +1,16 @@
 # openai-video-to-speech
-A set of Python scripts which converts an MP4 video to speech using Azure OpenAI services.
+A set of Python scripts for working with Azure Speech Service and OpenAI for text to speech, and text to avatar.
+
+Video to tracription (`transcription.py`)
 1. Take an MP4 video as a input
 1. Strip audio from input video
 1. Creates a transcription from the audio
-1. Create an text-to-speech audio file from the transcription
+
+Text to speech (`tts.py`)
+1. Create an text-to-speech audio file from the transcription (can use `transcription.py` to create the text or provide your own)
+
+Text to avatar with speech (`avatar.py`)
+1. Creates AI avatar (with speech) from a  transcription (can use `transcription.py` to create the text or provide your own)
 
 ## Setup OpenAI Service
 If you want to use Azure OpenAI voices, you need to setup an Azure OpenAI service.
@@ -43,4 +50,7 @@ AZURE_AVATAR_API_VERSION=2024-04-15-preview
 
 ## Create AI speech audio from transcription
 1. Run script `python tts.py --help` for arguments, options and usage
+
+## Create AI avatar video from transcription
+1. Run script `python avatar.py --help` for arguments, options and usage
 
