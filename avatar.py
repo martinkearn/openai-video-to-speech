@@ -11,25 +11,8 @@ import sys
 import time
 import uuid
 import requests
-
-logging.basicConfig(stream=sys.stdout, level=logging.INFO,  # set to logging.DEBUG for verbose output
-        format="[%(asctime)s] %(message)s", datefmt="%m/%d/%Y %I:%M:%S %p %Z")
-logger = logging.getLogger(__name__)
-
-
-SPEECH_ENDPOINT = os.getenv('SPEECH_ENDPOINT',"https://swedencentral.api.cognitive.microsoft.com/")
-API_VERSION = "2024-04-15-preview"
-AVATAR_VIDEO_OUTPUT_FILENAME = "output/avatar/output_avatar.mp4"
-AVATAR_CHARACTER = "harry" # talking avatar character
-AVATAR_STYLE = "business",  # talking avatar style, required for prebuilt avatar, optional for custom avatar
-AVATAR_VOICE = "en-US-FableMultilingualNeural"
-INPUT_TEXT_FILENAME = "input/avatar_input.txt"
-
-
-def _create_job_id():
-    # the job ID must be unique in current speech resource
-    # you can use a GUID or a self-increasing number
-    return uuid.uuid4()
+import argparse
+from dotenv import load_dotenv
 
 def _authenticate():
     SUBSCRIPTION_KEY = os.getenv("AZURE_SPEECH_KEY")
@@ -38,11 +21,11 @@ def _authenticate():
 
 def submit_synthesis(job_id: str):
     # Get the input text
-    with open(INPUT_TEXT_FILENAME, "r") as file:
+    with open(args.inputtranscriptionfilename, "r") as file:
         # Read the entire content of the file
         input_text_from_file = file.read()
 
-    url = f'{SPEECH_ENDPOINT}/avatar/batchsyntheses/{job_id}?api-version={API_VERSION}'
+    url = f'https://{SPEECH_REGION}.api.cognitive.microsoft.com/avatar/batchsyntheses/{job_id}?api-version={API_VERSION}'
     header = {
         'Content-Type': 'application/json'
     }
@@ -50,7 +33,7 @@ def submit_synthesis(job_id: str):
 
     payload = {
         'synthesisConfig': {
-            "voice": f'{AVATAR_VOICE}',
+            "voice": f'{args.voice}',
         },
         "inputKind": "plainText",
         "inputs": [
@@ -59,8 +42,8 @@ def submit_synthesis(job_id: str):
             },
         ],
         "avatarConfig": {
-            "talkingAvatarCharacter": f'{AVATAR_CHARACTER}',
-            "talkingAvatarStyle": f'business', # API is rejecting f'{AVATAR_STYLE}' for some reason. Not sure why. Have not investigated
+            "talkingAvatarCharacter": f'{args.character}',
+            "talkingAvatarStyle": f'{args.style}',#f'business', # API is rejecting args.style for some reason. Not sure why. Have not investigated
             "videoFormat": "mp4",  # mp4 or webm, webm is required for transparent background
             "videoCodec": "h264",  # hevc, h264 or vp9, vp9 is required for transparent background; default is hevc
             "subtitleType": "soft_embedded",
@@ -70,56 +53,114 @@ def submit_synthesis(job_id: str):
 
     response = requests.put(url, json.dumps(payload), headers=header)
     if response.status_code < 400:
-        logger.info('Batch avatar synthesis job submitted successfully')
-        logger.info(f'Job ID: {response.json()["id"]}')
+        print('Batch avatar synthesis job submitted successfully')
+        print(f'Job ID: {response.json()["id"]}')
         return True
     else:
-        logger.error(f'Failed to submit batch avatar synthesis job: [{response.status_code}], {response.text}')
+        print(f'Failed to submit batch avatar synthesis job: [{response.status_code}], {response.text}')
 
 
 def get_synthesis(job_id):
-    url = f'{SPEECH_ENDPOINT}/avatar/batchsyntheses/{job_id}?api-version={API_VERSION}'
+    url = f'https://{SPEECH_REGION}.api.cognitive.microsoft.com/avatar/batchsyntheses/{job_id}?api-version={API_VERSION}'
     header = _authenticate()
 
     response = requests.get(url, headers=header)
     if response.status_code < 400:
-        logger.debug('Get batch synthesis job successfully')
-        logger.debug(response.json())
         if response.json()['status'] == 'Succeeded':
-            logger.info(f'Batch synthesis job succeeded, download URL: {response.json()["outputs"]["result"]}')
+            print(f'Batch synthesis job succeeded, download URL: {response.json()["outputs"]["result"]}')
 
             # Download the video
             download_response = requests.get(response.json()["outputs"]["result"], stream=True)
             if download_response.status_code == 200:
                 # Open a local file with write-binary mode
-                with open(AVATAR_VIDEO_OUTPUT_FILENAME, 'wb') as file:
+                with open(args.outputvideofilename, 'wb') as file:
                     # Iterate over the response data in chunks
                     for chunk in download_response.iter_content(chunk_size=8192):
                         # Write each chunk to the file
                         file.write(chunk)
-                print(f"File downloaded successfully: {AVATAR_VIDEO_OUTPUT_FILENAME}")
+                print(f"File downloaded successfully: {args.outputvideofilename}")
             else:
                 print(f"Failed to download file. Status code: {response.status_code}")
         elif response.json()['status'] == 'Failed':
-            logger.info(f'Batch synthesis job failed')
-            logger.info(f'error.message: {response.json()["properties"]["error"]["message"]}')
+            print(f'Batch synthesis job failed')
+            print(f'error.message: {response.json()["properties"]["error"]["message"]}')
 
         return response.json()['status']
     else:
-        logger.error(f'Failed to get batch synthesis job: {response.text}')
+        print(f'Failed to get batch synthesis job: {response.text}')
 
+# MAIN
+# Parse the arguments
+parser = argparse.ArgumentParser(
+    description='avatar.py - Create a video (Mp4) featuring an AI generated avatar with AI generated voice based on text file input. Output files will be in /output/avatar.'
+)
 
-if __name__ == '__main__':
-    job_id = _create_job_id()
-    if submit_synthesis(job_id):
-        while True:
-            status = get_synthesis(job_id)
-            if status == 'Succeeded':
-                logger.info('batch avatar synthesis job succeeded')
-                break
-            elif status == 'Failed':
-                logger.error('batch avatar synthesis job failed')
-                break
-            else:
-                logger.info(f'batch avatar synthesis job is still running, status [{status}]')
-                time.sleep(5)
+parser.add_argument(
+    '-it', '--inputtranscriptionfilename',
+    type=str, 
+    help='Required. The path of the input transcription file (TXT).'
+)
+
+parser.add_argument(
+    '-ov', '--outputvideofilename',
+    nargs='?', 
+    default='output/avatar/output_avatar.mp4', 
+    type=str, 
+    help='The path of the output video file (MP4). Defaults to "output/avatar/output_avatar.mp4"'
+)
+
+parser.add_argument(
+    '-v', '--voice',
+    nargs='?', 
+    default='en-US-FableMultilingualNeural', 
+    type=str, 
+    help='Which voice to use. Can be one of the 6 OpenAI voices (alloy, echo, fable, onyx, nova, shimmer) or one of the many Azure Speech Service voices such as `en-US-FableMultilingualNeural`. Defaults to en-US-FableMultilingualNeural'
+)
+
+parser.add_argument(
+    '-c', '--character',
+    nargs='?', 
+    default='harry', 
+    type=str, 
+    help='The Azure Speech Avatar character to use. Defaults to "harry". See https://learn.microsoft.com/en-us/azure/ai-services/speech-service/text-to-speech-avatar/avatar-gestures-with-ssml#supported-prebuilt-avatar-characters-styles-and-gestures'
+)
+
+parser.add_argument(
+    '-s', '--style',
+    nargs='?', 
+    default='business', 
+    type=str, 
+    help='The Azure Speech Avatar character style to use. Defaults to "business". See https://learn.microsoft.com/en-us/azure/ai-services/speech-service/text-to-speech-avatar/avatar-gestures-with-ssml#supported-prebuilt-avatar-characters-styles-and-gestures'
+)
+
+args = parser.parse_args()
+
+# Show help message if no arguments are provided
+if len(sys.argv)==1:
+    parser.print_help(sys.stderr)
+    sys.exit(1)
+
+print("Starting")
+
+# Load the .env file
+load_dotenv()
+
+# Get env vars
+SPEECH_REGION = os.getenv('AZURE_SPEECH_REGION')
+API_VERSION = os.getenv('AZURE_AVATAR_API_VERSION')
+
+job_id = uuid.uuid4()
+if submit_synthesis(job_id):
+    while True:
+        status = get_synthesis(job_id)
+        if status == 'Succeeded':
+            print('Batch avatar synthesis job succeeded')
+            break
+        elif status == 'Failed':
+            print('Batch avatar synthesis job failed')
+            break
+        else:
+            print(f'Batch avatar synthesis job is still running, status [{status}]')
+            time.sleep(10)
+
+print("Done")
