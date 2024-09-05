@@ -64,15 +64,8 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     '-it', '--inputtranscriptionfilename',
     type=str, 
+    required=True,
     help='Required. The path of the input transcription file (TXT).'
-)
-
-parser.add_argument(
-    '-oa', '--outputaudiofilename',
-    nargs='?', 
-    default='output/tts/output_audio.mp3', 
-    type=str, 
-    help='The path of the output audio file (MP3). Defaults to "output/tts/output_audio.mp3"'
 )
 
 parser.add_argument(
@@ -80,8 +73,18 @@ parser.add_argument(
     nargs='?', 
     default='alloy', 
     type=str, 
+    required=True,
     help='Which voice to use. Can be one of the 6 OpenAI voices (alloy, echo, fable, onyx, nova, shimmer) or one of the many Azure Speech Service voices such as `en-GB-BellaNeural`. Defaults to alloy'
 )
+
+parser.add_argument(
+    '-oa', '--outputaudiofilename',
+    nargs='?', 
+    default='', 
+    type=str, 
+    help='The path of the output audio file (MP3). Defaults to "output/tts/<name of input file>.mp3"'
+)
+
 
 # Parse the arguments
 args = parser.parse_args()
@@ -90,6 +93,11 @@ args = parser.parse_args()
 if len(sys.argv)==1:
     parser.print_help(sys.stderr)
     sys.exit(1)
+
+# Set the output file name based on input file name if blank
+if args.outputaudiofilename is None or args.outputaudiofilename == "":
+    inputfilename = os.path.basename(args.inputtranscriptionfilename)
+    args.outputaudiofilename = f"output/tts/{inputfilename}.mp3"
 
 print("Starting")
 
