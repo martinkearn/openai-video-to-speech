@@ -73,12 +73,12 @@ def get_synthesis(job_id):
             download_response = requests.get(response.json()["outputs"]["result"], stream=True)
             if download_response.status_code == 200:
                 # Open a local file with write-binary mode
-                with open(args.outputvideofilename, 'wb') as file:
+                with open(output_video_path, 'wb') as file:
                     # Iterate over the response data in chunks
                     for chunk in download_response.iter_content(chunk_size=8192):
                         # Write each chunk to the file
                         file.write(chunk)
-                print(f"File downloaded successfully: {args.outputvideofilename}")
+                print(f"File downloaded successfully: {output_video_path}")
             else:
                 print(f"Failed to download file. Status code: {response.status_code}")
         elif response.json()['status'] == 'Failed':
@@ -96,17 +96,9 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument(
-    '-it', '--inputtranscriptionfilename',
+    '-i', '--inputtranscriptionfilename',
     type=str, 
     help='Required. The path of the input transcription file (TXT).'
-)
-
-parser.add_argument(
-    '-ov', '--outputvideofilename',
-    nargs='?', 
-    default='output/avatar/output_avatar.mp4', 
-    type=str, 
-    help='The path of the output video file (MP4). Defaults to "output/avatar/output_avatar.mp4"'
 )
 
 parser.add_argument(
@@ -144,6 +136,9 @@ print("Starting")
 
 # Load the .env file
 load_dotenv()
+
+# Set paths
+output_video_path = os.path.splitext(args.inputtranscriptionfilename)[0] + "_avatar.mp4"
 
 # Get env vars
 SPEECH_REGION = os.getenv('AZURE_SPEECH_REGION')
