@@ -39,8 +39,11 @@ if len(sys.argv)==1:
     parser.print_help(sys.stderr)
     sys.exit(1)
 
-
 print("Starting")
+
+# Set paths
+output_audio_path = os.path.splitext(args.inputvideofilename)[0] + "_audio.mp3"
+
 
 # Load the .env file
 load_dotenv()
@@ -49,7 +52,7 @@ load_dotenv()
 print("1. Getting the audio from the video " +args.inputvideofilename)
 video = VideoFileClip(args.inputvideofilename)
 audio = video.audio
-audio.write_audiofile(args.outputaudiofilename)
+audio.write_audiofile(output_audio_path)
 
 # Get the audio as a transcript via OpenAI
 print("2. Transcribing the audio")
@@ -59,7 +62,7 @@ transcription_client = AzureOpenAI(
     azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
 )
 transcription_result = transcription_client.audio.transcriptions.create(
-    file=open("./"+args.outputaudiofilename, "rb"),           
+    file=open(output_audio_path, "rb"),           
     model=os.getenv("AZURE_OPENAI_WHISPER_DEPLOYMENT"),
     language="en")
 
