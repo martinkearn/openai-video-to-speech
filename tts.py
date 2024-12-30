@@ -25,9 +25,9 @@ def openai():
 
     if tts_response.status_code == 200:
         # Save the binary content to a file
-        with open(args.outputaudiofilename, 'wb') as file:
+        with open(output_audio_path, 'wb') as file:
             file.write(tts_response.content)
-        print("2. TTS output file saved successfully as " +args.outputaudiofilename)
+        print("2. TTS output file saved successfully as " +output_audio_path)
     else:
         print(f"Failed to retrieve content. Status code: {tts_response.status_code}")
         print(f"Response content: {tts_response.content}")
@@ -42,7 +42,7 @@ def azurespeech():
     speech_service_region = os.getenv("AZURE_SPEECH_REGION")
     speech_config = speechsdk.SpeechConfig(subscription=speech_service_key, region=speech_service_region)
     speech_config.speech_synthesis_voice_name = args.voice
-    audio_output = speechsdk.audio.AudioOutputConfig(filename=args.outputaudiofilename)
+    audio_output = speechsdk.audio.AudioOutputConfig(filename=output_audio_path)
     synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_output)
 
     # Perform the speech synthesis
@@ -50,7 +50,7 @@ def azurespeech():
 
     # Check result status
     if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
-        print("2. TTS output file saved successfully as " +args.outputaudiofilename)
+        print("2. TTS output file saved successfully as " +output_audio_path)
     elif result.reason == speechsdk.ResultReason.Canceled:
         cancellation_details = result.cancellation_details
         print(f"Speech synthesis canceled: {cancellation_details.reason}")
@@ -62,7 +62,7 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument(
-    '-it', '--inputtranscriptionfilename',
+    '-i', '--inputtranscriptionfilename',
     type=str, 
     required=True,
     help='Required. The path of the input transcription file (TXT).'
@@ -77,15 +77,6 @@ parser.add_argument(
     help='Which voice to use. Can be one of the 6 OpenAI voices (alloy, echo, fable, onyx, nova, shimmer) or one of the many Azure Speech Service voices such as `en-GB-BellaNeural`. Defaults to alloy'
 )
 
-parser.add_argument(
-    '-oa', '--outputaudiofilename',
-    nargs='?', 
-    default='', 
-    type=str, 
-    help='The path of the output audio file (MP3). Defaults to "output/tts/<name of input file>.mp3"'
-)
-
-
 # Parse the arguments
 args = parser.parse_args()
 
@@ -94,10 +85,8 @@ if len(sys.argv)==1:
     parser.print_help(sys.stderr)
     sys.exit(1)
 
-# Set the output file name based on input file name if blank
-if args.outputaudiofilename is None or args.outputaudiofilename == "":
-    inputfilename = os.path.basename(args.inputtranscriptionfilename)
-    args.outputaudiofilename = f"output/tts/{inputfilename}.mp3"
+# Set paths
+output_audio_path = os.path.splitext(args.inputtranscriptionfilename)[0] + "_aiaudio.mp3"
 
 print("Starting")
 
@@ -125,7 +114,7 @@ if args.voice in open_ai_voices:
 else:
     azurespeech()
 
-print("Done")
+print("Tts.py is complete")
 
 
 

@@ -46,10 +46,10 @@ AZURE_AVATAR_API_VERSION=2024-04-15-preview
 1. Install dependencies `pip3 install -r requirements.txt`
 
 ## Create a transcription from a video
-1. Run script `python transcription.py --help` for arguments, options and usage
+1. Run script `python transcription.py -i <full path to input video file>` or `python transcription.py --help` for arguments, options and usage
 
 ## Create AI speech audio from transcription
-1. Run script `python tts.py --help` for arguments, options and usage
+1. Run script `python tts.py -i <full path to input transcription file>` or `python tts.py --help` for arguments, options and usage
 
 ## Create AI avatar video from transcription
 1. Run script `python avatar.py --help` for arguments, options and usage
