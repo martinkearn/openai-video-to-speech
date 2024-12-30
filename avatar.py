@@ -158,4 +158,4 @@ if submit_synthesis(job_id):
             print(f'Batch avatar synthesis job is still running, status [{status}]')
             time.sleep(10)
 
-print("Done")
+print("Avatar.py is complete")

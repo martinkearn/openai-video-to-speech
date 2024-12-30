@@ -114,7 +114,7 @@ if args.voice in open_ai_voices:
 else:
     azurespeech()
 
-print("Done")
+print("Tts.py is complete")
 
 
 
