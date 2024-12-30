@@ -10,25 +10,9 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument(
-    '-iv', '--inputvideofilename',
+    '-i', '--inputvideofilename',
     type=str, 
-    help='Required. The path and file name of the input video.'
-)
-
-parser.add_argument(
-    '-oa', '--outputaudiofilename',
-    nargs='?', 
-    default='output/transcription/output_original_audio.mp3', 
-    type=str, 
-    help='The path of the output audio file (MP3). Defaults to output/transcription/output_original_audio.mp3'
-)
-
-parser.add_argument(
-    '-ot', '--outputtranscriptionfilename',
-    nargs='?', 
-    default='output/transcription/output_transcription.txt', 
-    type=str, 
-    help='The path of the output transcription file (TXT). Defaults to output/transcription/output_transcription.txt'
+    help='Required. The absolute path, including file name to the input video.'
 )
 
 # Parse the arguments
@@ -43,7 +27,7 @@ print("Starting")
 
 # Set paths
 output_audio_path = os.path.splitext(args.inputvideofilename)[0] + "_audio.mp3"
-
+output_transcription_path = os.path.splitext(args.inputvideofilename)[0] + "_transcription.txt"
 
 # Load the .env file
 load_dotenv()
@@ -66,8 +50,7 @@ transcription_result = transcription_client.audio.transcriptions.create(
     model=os.getenv("AZURE_OPENAI_WHISPER_DEPLOYMENT"),
     language="en")
 
-with open(args.outputtranscriptionfilename, "w") as file:
+with open(output_transcription_path, "w") as file:
     file.write(transcription_result.text)
 
-print("3. Written transcription to " +args.outputtranscriptionfilename)
-print("Done")
+print("Transcription.py is complete")
