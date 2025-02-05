@@ -15,10 +15,10 @@ Text to avatar with speech (`avatar.py`)
 ## Setup OpenAI Service
 If you want to use Azure OpenAI voices, you need to setup an Azure OpenAI service.
 
-1. Create an Azure OpenAI service in the North Central US or Sweden Central regions using the steps outlined at https://learn.microsoft.com/en-gb/azure/ai-services/openai/whisper-quickstart?tabs=command-line%2Cpython-new&pivots=programming-language-python 
+1. Create an Azure OpenAI service in the North Central US or Sweden Central regions using the steps outlined at [Quickstart: Speech to text with the Azure OpenAI Whisper model](https://learn.microsoft.com/en-gb/azure/ai-services/openai/whisper-quickstart?tabs=command-line%2Cpython-new&pivots=programming-language-python)
 1. Obtain the `Endpoint` and `Key` from [Azure Portal](https://portal.azure.com/) > The OpenAI service you just created > Keys and Endpoints
-1. Using the [Azure OpenAI Studio](https://oai.azure.com/) > Deployments, deploy a `tts-hd` model using the steps outlined in https://learn.microsoft.com/en-gb/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model take a note of the deployment name
-1. Using the [Azure OpenAI Studio](https://oai.azure.com/) > Deployments, deploy a `Whisper` model using the steps outlined in https://learn.microsoft.com/en-gb/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model take a note of the deployment name
+1. Using the [Azure OpenAI Studio](https://oai.azure.com/) > Deployments, deploy a `tts-hd` model using the steps outlined in [Create and deploy an Azure OpenAI Service resource](https://learn.microsoft.com/en-gb/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model) take a note of the deployment name
+1. Using the [Azure OpenAI Studio](https://oai.azure.com/) > Deployments, deploy a `Whisper` model using the steps outlined in [Create and deploy an Azure OpenAI Service resource](https://learn.microsoft.com/en-gb/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model) take a note of the deployment name
 1. Select a voice to use from https://platform.openai.com/docs/guides/text-to-speech. Use `alloy` if unsure
 
 ## Setup Azure Speech Service
@@ -49,7 +49,7 @@ AZURE_AVATAR_API_VERSION=2024-04-15-preview
 1. Run script `python transcription.py -i <full path to input video file>` or `python transcription.py --help` for arguments, options and usage
 
 ## Create AI speech audio from transcription
-1. Run script `python tts.py -i <full path to input transcription file>` or `python tts.py --help` for arguments, options and usage
+1. Run script `python tts.py -i <full path to input transcription file> -v alloy` (this will use the OpenAI alloy voice) or `python tts.py --help` for arguments, options and usage
 
 ## Create AI avatar video from transcription
 1. Run script `python avatar.py --help` for arguments, options and usage
