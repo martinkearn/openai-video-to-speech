@@ -11,7 +11,7 @@ def openai():
     print("1. Converting " +args.inputtranscriptionfilename +" with the Azure OpenAI and the " +args.voice +" voice")
 
     # Make API call
-    tts_url = os.getenv("AZURE_OPENAI_ENDPOINT") +"/openai/deployments/" +os.getenv("AZURE_OPENAI_TTS_DEPLOYMENT") +"/audio/speech?api-version=2024-02-15-preview"
+    tts_url = os.getenv("AZURE_OPENAI_ENDPOINT") +"/openai/deployments/" +os.getenv("AZURE_OPENAI_TTS_DEPLOYMENT") +"/audio/speech?api-version=2025-01-01-preview"
     tts_headers_list = {
     "api-key": os.getenv("AZURE_OPENAI_API_KEY"),
     "Content-Type": "application/json" 
@@ -93,13 +93,16 @@ print("Starting")
 # Load the .env file
 load_dotenv()
 
-# Set OpenAI voice dictionary. Avaliable voices from https://platform.openai.com/docs/guides/text-to-speech/quickstart
+# Set OpenAI voice dictionary. Available voices from https://platform.openai.com/docs/guides/text-to-speech/quickstart
 open_ai_voices = {
     "alloy": 1,
-    "echo": 2,
-    "fable": 3,
-    "onyx": 4,
-    "nova": 5,
+    "ash": 2,
+    "coral": 3,
+    "echo": 4,
+    "fable": 5,
+    "onyx": 6,
+    "nova": 6,
+    "sage": 6,
     "shimmer": 6
 }
 
