@@ -3,7 +3,7 @@ import sys
 import argparse
 from openai import AzureOpenAI
 from dotenv import load_dotenv
-from moviepy.editor import VideoFileClip
+from moviepy import VideoFileClip
 
 parser = argparse.ArgumentParser(
     description='transcription.py - Converts a video into an MP3 audio track and then produces TXT transcription based on the audio track. Output files will be in /output/transcription.'
@@ -37,6 +37,8 @@ print("1. Getting the audio from the video " +args.inputvideofilename)
 video = VideoFileClip(args.inputvideofilename)
 audio = video.audio
 audio.write_audiofile(output_audio_path)
+video.close()
+audio.close()
 
 # Get the audio as a transcript via OpenAI
 print("2. Transcribing the audio")

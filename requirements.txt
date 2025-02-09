@@ -14,7 +14,7 @@ httpx==0.27.0
 idna==3.7
 imageio==2.34.2
 imageio-ffmpeg==0.5.1
-moviepy==1.0.3
+moviepy==2.1.2
 numpy==2.0.0
 openai==1.35.13
 pillow==10.4.0
