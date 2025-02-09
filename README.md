@@ -41,9 +41,10 @@ AZURE_SPEECH_KEY=Key
 AZURE_SPEECH_REGION=swedencentral
 AZURE_AVATAR_API_VERSION=2024-04-15-preview
 ```
-1. Create a Python Virtual Environment `python3 -m venv venv`
-1. Activate virtual environment using `venv\Scripts\activate` for Windows or `source venv/bin/activate` on MacOS/Linux
+1. Create a Python Virtual Environment `python3 -m venv video-to-speech-venv`
+1. Activate virtual environment using `source video-to-speech-venv/bin/activate` on MacOS or `video-to-speech-venv\Scripts\activate` for Windows 
 1. Install dependencies `pip3 install -r requirements.txt`
+1. Install [FFmpeg](https://ffmpeg.org) for video decoding and encoding. On MacOS use `brew install ffmpeg` or `choco install ffmpeg` on Windows
 
 ## Create a transcription from a video
 1. Run script `python transcription.py -i <full path to input video file>` or `python transcription.py --help` for arguments, options and usage
