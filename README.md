@@ -19,7 +19,7 @@ If you want to use Azure OpenAI voices, you need to setup an Azure OpenAI servic
 1. Obtain the `Endpoint` and `Key` from [Azure Portal](https://portal.azure.com/) > The OpenAI service you just created > Keys and Endpoints
 1. Using the [Azure OpenAI Studio](https://oai.azure.com/) > Deployments, deploy a `tts-hd` model using the steps outlined in [Create and deploy an Azure OpenAI Service resource](https://learn.microsoft.com/en-gb/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model) take a note of the deployment name
 1. Using the [Azure OpenAI Studio](https://oai.azure.com/) > Deployments, deploy a `Whisper` model using the steps outlined in [Create and deploy an Azure OpenAI Service resource](https://learn.microsoft.com/en-gb/azure/ai-services/openai/how-to/create-resource?pivots=web-portal#deploy-a-model) take a note of the deployment name
-1. Select a voice to use from https://platform.openai.com/docs/guides/text-to-speech. Use `alloy` if unsure
+1. Select a voice to use from https://platform.openai.com/docs/guides/text-to-speech. Use `alloy` if unsure. The `ash`, `coral` and `sage` voices are not yet included in the OpenAI API so cannot yet be used in this tool.
 
 ## Setup Azure Speech Service
 If you want to use Azure Speech Service voices, you need to setup an Azure Speech service. These voices are not as natural as OpenAI but there is a much broader choice of languages, accents and controls.
