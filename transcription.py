@@ -47,10 +47,11 @@ transcription_client = AzureOpenAI(
     api_version = "2024-02-15-preview",
     azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
 )
-transcription_result = transcription_client.audio.transcriptions.create(
-    file=open(output_audio_path, "rb"),           
-    model=os.getenv("AZURE_OPENAI_WHISPER_DEPLOYMENT"),
-    language="en")
+with open(output_audio_path, "rb") as audio_file:
+    transcription_result = transcription_client.audio.transcriptions.create(
+        file=audio_file,           
+        model=os.getenv("AZURE_OPENAI_WHISPER_DEPLOYMENT"),
+        language="en")
 
 with open(output_transcription_path, "w") as file:
     file.write(transcription_result.text)
